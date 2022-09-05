@@ -1,15 +1,18 @@
-import express from 'express';
-import morgan from 'morgan';
-import productRouter from './routes/product.routes';
+const express = require('express');
+const morgan = require('morgan');
+
+require('dotenv').config();
+
+const port=process.env.PORT;
 
 const app=express();
 
-app.set('port',3002);
+app.set('port',port);
 
 app.use(express.json());
 
 app.use(morgan("dev"));
 
-app.use('/api/productos',productRouter);
+app.use('/api/productos',require('./routes/product.routes'));
 
-export default app;
+module.exports = app;
