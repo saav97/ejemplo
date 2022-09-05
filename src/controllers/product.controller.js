@@ -1,4 +1,5 @@
-const getConnection = require('./../database/database');
+const {getConnection} = require('./../database/database');
+
 
 /**
  * 
@@ -8,7 +9,7 @@ const getConnection = require('./../database/database');
 
 
 const getProducts = async(req, res)=>{
-
+    console.log("Error");
     try {
         const connection = await getConnection();
 
@@ -22,14 +23,13 @@ const getProducts = async(req, res)=>{
     } catch (error) {
         res.status(500).json({
             ok:false,
-            error
+            msg: error.message
         })
     }
    
 }
 
 const addProduct = async (req, res)=>{
-    console.log(req.body);
     const {nombre, precio,costo, cantidad } = req.body
 
     const producto ={
@@ -38,7 +38,6 @@ const addProduct = async (req, res)=>{
         costo,
         cantidad
     }
-    console.log(producto);
     try {
         const connection = await getConnection();
 
@@ -46,6 +45,7 @@ const addProduct = async (req, res)=>{
     
         res.status(200).json({
             ok:true,
+            result,
             message:'Producto agregado con exito!!'
         }); 
     } catch (error) {
@@ -53,11 +53,49 @@ const addProduct = async (req, res)=>{
             ok:false,
             message:error
         })
+    }  
+}
+
+const editProducto = async(req, res)=>{
+    console.log("Entro al edit");
+    const id = req.params.id
+    console.log(id);
+    try {
+        
+
+        const productoActualizado = req.body
+
+        const connection = await getConnection();
+
+        const idProducto = await connection.query("SELECT id_producto FROM producto WHERE id_producto = ?",id);
+
+        if(idProducto.length<1){
+            return res.status(404).json({
+                ok:false,
+                message: 'El producto no existe'
+            });        
+        }
+
+        const result = await connection.query("UPDATE producto set ? WHERE id_producto=?",[productoActualizado,id]);
+
+        res.status(200).json({
+            ok:true,
+            result,
+            msg:'Producto Actualizado'
+
+        })
+
+    } catch (error) {
+        res.status(500).json({
+            ok:false,
+            msg: error.message
+        })
     }
     
 }
 
 module.exports={
     getProducts,
-    addProduct
+    addProduct,
+    editProducto
 }
