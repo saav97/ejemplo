@@ -9,7 +9,6 @@ const {getConnection} = require('./../database/database');
 
 
 const getProducts = async(req, res)=>{
-    console.log("Error");
     try {
         const connection = await getConnection();
 
@@ -57,12 +56,10 @@ const addProduct = async (req, res)=>{
 }
 
 const editProducto = async(req, res)=>{
-    console.log("Entro al edit");
     const id = req.params.id
     console.log(id);
     try {
         
-
         const productoActualizado = req.body
 
         const connection = await getConnection();
