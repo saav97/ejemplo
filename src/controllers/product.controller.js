@@ -1,4 +1,4 @@
-import {getConnection} from './../database/database'
+const {getConnection} = require('./../database/database');
 
 /**
  * 
@@ -57,7 +57,7 @@ const addProduct = async (req, res)=>{
     
 }
 
-export const methods={
+module.exports={
     getProducts,
     addProduct
 }
